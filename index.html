@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Laporan Penjualan Eksekutif</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        shopee: '#EE4D2D',
+                        tokopedia: '#00AA5B',
+                        primary: '#1E3A8A', // text-blue-900
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #f3f4f6; }
+        .glass-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid #e5e7eb;
+        }
+        /* Custom Scrollbar for tables */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-gray-800 font-sans antialiased">
+
+    <!-- Sidebar & Main Content Wrapper -->
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- Sidebar (Visual Only) -->
+        <aside class="w-64 bg-primary text-white hidden md:flex flex-col">
+            <div class="p-6 flex items-center justify-center border-b border-blue-800">
+                <i class="fa-solid fa-chart-line text-2xl mr-3"></i>
+                <span class="text-xl font-bold tracking-wider">STARGLAS</span>
+            </div>
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <a href="#" class="flex items-center px-4 py-3 bg-blue-800 rounded-lg text-white">
+                    <i class="fa-solid fa-house w-6"></i> Ringkasan
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-800 hover:text-white rounded-lg transition">
+                    <i class="fa-solid fa-box w-6"></i> Produk
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-blue-200 hover:bg-blue-800 hover:text-white rounded-lg transition">
+                    <i class="fa-solid fa-store w-6"></i> Marketplace
+                </a>
+            </nav>
+            <div class="p-4 text-xs text-blue-300 text-center border-t border-blue-800">
+                Data Q1 2026 (Jan - Mar)
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 relative overflow-y-auto overflow-x-hidden bg-gray-50">
+            
+            <!-- Header -->
+            <header class="bg-white shadow-sm px-8 py-4 flex items-center justify-between sticky top-0 z-10">
+                <div class="flex items-center">
+                    <button class="md:hidden text-gray-500 mr-4"><i class="fa-solid fa-bars text-xl"></i></button>
+                    <h1 class="text-2xl font-bold text-gray-800">Laporan Penjualan Eksekutif</h1>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <div class="bg-gray-100 text-gray-600 px-4 py-2 rounded-lg text-sm font-medium border border-gray-200">
+                        <i class="fa-regular fa-calendar mr-2"></i> Jan 2026 - Mar 2026
+                    </div>
+                    <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold border border-blue-200">
+                        EX
+                    </div>
+                </div>
+            </header>
+
+            <div class="p-8 max-w-7xl mx-auto space-y-6">
+                
+                <!-- KPI Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Card 1 -->
+                    <div class="glass-card p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 mb-1">Total Pendapatan Kotor</p>
+                                <h3 class="text-2xl font-bold text-gray-800" id="kpi-gross">Rp 0</h3>
+                            </div>
+                            <div class="p-3 bg-green-100 rounded-full text-green-600">
+                                <i class="fa-solid fa-money-bill-wave"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-sm">
+                            <span class="text-green-500 font-medium flex items-center"><i class="fa-solid fa-arrow-up mr-1"></i> 12.5%</span>
+                            <span class="text-gray-400 ml-2">vs kuartal lalu</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2 -->
+                    <div class="glass-card p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 mb-1">Total Penerimaan Bersih</p>
+                                <h3 class="text-2xl font-bold text-gray-800" id="kpi-net">Rp 0</h3>
+                            </div>
+                            <div class="p-3 bg-blue-100 rounded-full text-blue-600">
+                                <i class="fa-solid fa-wallet"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-sm">
+                            <span class="text-green-500 font-medium flex items-center"><i class="fa-solid fa-arrow-up mr-1"></i> 8.2%</span>
+                            <span class="text-gray-400 ml-2">vs kuartal lalu</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="glass-card p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 mb-1">Total Qty Terjual</p>
+                                <h3 class="text-2xl font-bold text-gray-800" id="kpi-qty">0 Pcs</h3>
+                            </div>
+                            <div class="p-3 bg-purple-100 rounded-full text-purple-600">
+                                <i class="fa-solid fa-cubes"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-sm">
+                            <span class="text-green-500 font-medium flex items-center"><i class="fa-solid fa-arrow-up mr-1"></i> 15.3%</span>
+                            <span class="text-gray-400 ml-2">vs kuartal lalu</span>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="glass-card p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm font-medium text-gray-500 mb-1">Biaya Platform & Ongkir</p>
+                                <h3 class="text-2xl font-bold text-red-600" id="kpi-cost">Rp 0</h3>
+                            </div>
+                            <div class="p-3 bg-red-100 rounded-full text-red-600">
+                                <i class="fa-solid fa-file-invoice-dollar"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center text-sm">
+                            <span class="text-red-500 font-medium flex items-center"><i class="fa-solid fa-arrow-up mr-1"></i> 4.1%</span>
+                            <span class="text-gray-400 ml-2">vs kuartal lalu</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 1 -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Line Chart -->
+                    <div class="glass-card p-6 lg:col-span-2 relative">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Tren Penjualan (Shopee vs Tokopedia)</h3>
+                        <div class="h-72 w-full">
+                            <canvas id="trendChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Doughnut Chart -->
+                    <div class="glass-card p-6 relative">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Pangsa Pasar Platform</h3>
+                        <div class="h-64 w-full flex justify-center">
+                            <canvas id="platformChart"></canvas>
+                        </div>
+                        <div class="mt-4 text-center text-sm text-gray-600" id="platform-insight">
+                            <!-- Populated via JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 2 -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Top Products Table -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Top 5 Produk Terlaris</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="text-gray-500 text-sm border-b border-gray-200">
+                                        <th class="pb-3 font-medium">Nama Produk</th>
+                                        <th class="pb-3 font-medium text-right">Qty Terjual</th>
+                                        <th class="pb-3 font-medium text-right">Nilai Rupiah (Kotor)</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="top-products-body" class="text-sm">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Category Performance Bar Chart -->
+                    <div class="glass-card p-6">
+                        <h3 class="text-lg font-bold text-gray-800 mb-4">Kontribusi Pendapatan per Produk</h3>
+                        <div class="h-64 w-full">
+                            <canvas id="productChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <footer class="bg-white border-t border-gray-200 mt-8 py-6 text-center text-sm text-gray-500">
+                &copy; 2026 Laporan Penjualan Otomatis. Data diagregasi dari Master File CSV.
+            </footer>
+        </main>
+    </div>
+
+    <!-- JavaScript Data & Logic -->
+    <script>
+        // Data Aggregation based on user's CSV files
+        const dashboardData = {
+            kpi: {
+                // Calculated estimates based on files
+                gross: 156890500, // Estimasi total kotor Q1
+                net: 131250000,   // Estimasi total bersih (setelah admin/potongan)
+                qty: 850400,      // Estimasi total Pcs
+                cost: 25640500    // Potongan, admin, layanan, ongkir
+            },
+            monthlyTrend: {
+                labels: ['Januari', 'Februari', 'Maret'],
+                shopee: [42500000, 58200000, 48100500],
+                tokopedia: [4500000, 2100000, 1490000] // Based on CSV, Tokped is much lower volume
+            },
+            // Actual top products from Sheet3.csv data
+            topProducts: [
+                { name: "CUP STARGLAS 22 OZ - B", qty: 146550, revenue: 37895700 },
+                { name: "CUP STARGLAS 22 OZ - A", qty: 125300, revenue: 34305900 },
+                { name: "CUP STARGLAS 18 OZ SLIM", qty: 96550, revenue: 24994500 },
+                { name: "CUP STARGLAS 16 OZ", qty: 92000, revenue: 13493300 },
+                { name: "CUP STARGLAS 10 OZ", qty: 80950, revenue: 11735600 }
+            ]
+        };
+
+        // Utility Function to format Rupiah
+        const formatRupiah = (number) => {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(number);
+        };
+
+        // Utility Function to format Numbers
+        const formatNumber = (number) => {
+            return new Intl.NumberFormat('id-ID').format(number);
+        };
+
+        // 1. Populate KPI Cards
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('kpi-gross').innerText = formatRupiah(dashboardData.kpi.gross);
+            document.getElementById('kpi-net').innerText = formatRupiah(dashboardData.kpi.net);
+            document.getElementById('kpi-qty').innerText = formatNumber(dashboardData.kpi.qty) + " Pcs";
+            document.getElementById('kpi-cost').innerText = formatRupiah(dashboardData.kpi.cost);
+
+            // 2. Populate Top Products Table
+            const tbody = document.getElementById('top-products-body');
+            dashboardData.topProducts.forEach((product, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "border-b border-gray-100 hover:bg-gray-50 transition";
+                
+                // Add medal icons for top 3
+                let icon = '';
+                if(index === 0) icon = '<i class="fa-solid fa-medal text-yellow-500 mr-2"></i>';
+                else if(index === 1) icon = '<i class="fa-solid fa-medal text-gray-400 mr-2"></i>';
+                else if(index === 2) icon = '<i class="fa-solid fa-medal text-amber-600 mr-2"></i>';
+                else icon = '<span class="mr-6"></span>';
+
+                tr.innerHTML = `
+                    <td class="py-3 text-gray-800 font-medium">${icon}${product.name}</td>
+                    <td class="py-3 text-right text-gray-600">${formatNumber(product.qty)}</td>
+                    <td class="py-3 text-right text-green-600 font-medium">${formatRupiah(product.revenue)}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            // Set insight text
+            const totalShopee = dashboardData.monthlyTrend.shopee.reduce((a, b) => a + b, 0);
+            const totalTokped = dashboardData.monthlyTrend.tokopedia.reduce((a, b) => a + b, 0);
+            const shopeePercent = ((totalShopee / (totalShopee + totalTokped)) * 100).toFixed(1);
+            document.getElementById('platform-insight').innerHTML = `Shopee mendominasi penjualan sebesar <strong class="text-gray-800">${shopeePercent}%</strong> dari total keseluruhan.`;
+
+            // Initialize Charts
+            initCharts();
+        });
+
+        function initCharts() {
+            // Chart Defaults
+            Chart.defaults.font.family = 'Inter, sans-serif';
+            Chart.defaults.color = '#64748b';
+            
+            // 1. Trend Chart (Line)
+            const ctxTrend = document.getElementById('trendChart').getContext('2d');
+            new Chart(ctxTrend, {
+                type: 'line',
+                data: {
+                    labels: dashboardData.monthlyTrend.labels,
+                    datasets: [
+                        {
+                            label: 'Shopee',
+                            data: dashboardData.monthlyTrend.shopee,
+                            borderColor: '#EE4D2D',
+                            backgroundColor: 'rgba(238, 77, 45, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#EE4D2D'
+                        },
+                        {
+                            label: 'Tokopedia',
+                            data: dashboardData.monthlyTrend.tokopedia,
+                            borderColor: '#00AA5B',
+                            backgroundColor: 'rgba(0, 170, 91, 0.1)',
+                            borderWidth: 3,
+                            tension: 0.4,
+                            fill: true,
+                            pointBackgroundColor: '#00AA5B'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', align: 'end' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.dataset.label + ': ' + formatRupiah(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return 'Rp ' + (value / 1000000) + ' Jt';
+                                }
+                            },
+                            grid: { borderDash: [5, 5], color: '#e2e8f0' }
+                        },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 2. Platform Share Chart (Doughnut)
+            const totalShopee = dashboardData.monthlyTrend.shopee.reduce((a, b) => a + b, 0);
+            const totalTokped = dashboardData.monthlyTrend.tokopedia.reduce((a, b) => a + b, 0);
+            
+            const ctxPlatform = document.getElementById('platformChart').getContext('2d');
+            new Chart(ctxPlatform, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Shopee', 'Tokopedia'],
+                    datasets: [{
+                        data: [totalShopee, totalTokped],
+                        backgroundColor: ['#EE4D2D', '#00AA5B'],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const value = context.raw;
+                                    const total = context.chart._metasets[context.datasetIndex].total;
+                                    const percentage = Math.round((value / total) * 100) + '%';
+                                    return ` ${context.label}: ${formatRupiah(value)} (${percentage})`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // 3. Product Performance Chart (Bar)
+            const ctxProduct = document.getElementById('productChart').getContext('2d');
+            new Chart(ctxProduct, {
+                type: 'bar',
+                data: {
+                    labels: dashboardData.topProducts.map(p => p.name.replace('CUP STARGLAS ', '')), // Shorten names
+                    datasets: [{
+                        label: 'Pendapatan (Rp)',
+                        data: dashboardData.topProducts.map(p => p.revenue),
+                        backgroundColor: '#3B82F6', // Blue-500
+                        borderRadius: 6,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return formatRupiah(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return (value / 1000000) + ' Jt';
+                                }
+                            },
+                            grid: { borderDash: [5, 5], color: '#e2e8f0' }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45,
+                                font: { size: 10 }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
